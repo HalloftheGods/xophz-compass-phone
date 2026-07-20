@@ -4,6 +4,8 @@
  * Description:       Standalone WordPress backend and router for the My Compass Phone web app.
  * Version:           26.7.20.1409
  * Author:            Hall of the Gods, Inc.
+ * Category:          Command Deck
+ * Group:             Ecosystem
  * Text Domain:       xophz-compass-phone
  */
 
