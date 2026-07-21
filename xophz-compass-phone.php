@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       My Compass Phone
  * Description:       Standalone WordPress backend and router for the My Compass Phone web app.
- * Version:           26.7.21.106
+ * Version:           26.7.21
  * Author:            Hall of the Gods, Inc.
  * Category:          Command Deck
  * Group:             Ecosystem
@@ -13,7 +13,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.7.21.106' );
+define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.7.21' );
 define( 'XOPHZ_COMPASS_PHONE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'XOPHZ_COMPASS_PHONE_URL', plugin_dir_url( __FILE__ ) );
 
