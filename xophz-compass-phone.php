@@ -148,6 +148,12 @@ class Xophz_Compass_Phone {
                 $content = str_replace( "'/assets/", "'" . $dist_url . "assets/", $content );
                 $content = str_replace( '"/vite.svg"', '"' . $dist_url . 'vite.svg"', $content );
                 
+                // Inject wpApiSettings for production so API requests have the nonce
+                $nonce = wp_create_nonce('wp_rest');
+                $user_id = get_current_user_id();
+                $wp_api_settings = "<script>window.wpApiSettings = { root: '" . esc_url_raw(rest_url()) . "', nonce: '" . $nonce . "', pluginUrl: '" . esc_url_raw(XOPHZ_COMPASS_PHONE_URL) . "', version: '" . esc_js(XOPHZ_COMPASS_PHONE_VERSION) . "', userId: " . $user_id . " };</script>";
+                $content = str_replace('</head>', $wp_api_settings . "\n</head>", $content);
+                
                 echo $content;
             } else {
                 echo '<h2>My Compass Phone is not built yet.</h2><p>Please run <code>npm run build</code> in the <code>apps/my-compass-phone</code> directory.</p>';
