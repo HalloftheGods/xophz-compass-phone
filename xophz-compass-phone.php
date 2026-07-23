@@ -17,6 +17,8 @@ define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.7.21' );
 define( 'XOPHZ_COMPASS_PHONE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'XOPHZ_COMPASS_PHONE_URL', plugin_dir_url( __FILE__ ) );
 
+require_once XOPHZ_COMPASS_PHONE_PATH . 'includes/class-xophz-compass-phone-auth-rest.php';
+
 class Xophz_Compass_Phone {
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
@@ -108,7 +110,12 @@ class Xophz_Compass_Phone {
         if ( get_query_var( 'xophz_compass_phone' ) ) {
             $is_dev = $this->is_dev_mode();
             $vite_port = '5176';
-            $wp_host = wp_parse_url( home_url(), PHP_URL_HOST );
+            if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+                $host_parts = explode(':', $_SERVER['HTTP_HOST']);
+                $wp_host = $host_parts[0];
+            } else {
+                $wp_host = wp_parse_url( home_url(), PHP_URL_HOST );
+            }
             $vite_url = "//" . $wp_host . ":" . $vite_port;
 
             if ( $is_dev ) {
