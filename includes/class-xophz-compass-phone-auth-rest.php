@@ -161,7 +161,7 @@ class Xophz_Compass_Phone_Auth_Rest {
 		$slug = get_option( 'xophz_compass_phone_custom_slug', 'my-compass-phone' );
 		$magic_url = home_url( '/' . $slug . '?magic_token=' . $token );
 
-		$subject = 'Your Verification Code & Magic Link for COMPASS Phone';
+		$subject = 'Your Verification Magic Key  for COMPASS Phone';
 		$message = "Hello,\n\nYour 6-digit verification code is: " . $token . "\n\nOr click the link below to sign in directly:\n" . $magic_url . "\n\nThis code and link will expire in 15 minutes.\n\nIf you didn't request this, please ignore this email.";
 		$headers = array('Content-Type: text/plain; charset=UTF-8');
 		@wp_mail( $email, $subject, $message, $headers );

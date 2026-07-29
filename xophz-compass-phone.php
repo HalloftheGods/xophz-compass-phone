@@ -109,7 +109,7 @@ class Xophz_Compass_Phone {
     public function template_redirect() {
         if ( get_query_var( 'xophz_compass_phone' ) ) {
             $is_dev = $this->is_dev_mode();
-            $vite_port = '5176';
+            $vite_port = '8086';
             if ( isset( $_SERVER['HTTP_HOST'] ) ) {
                 $host_parts = explode(':', $_SERVER['HTTP_HOST']);
                 $wp_host = $host_parts[0];
