@@ -74,6 +74,16 @@ class Xophz_Compass_Phone_Auth_Rest {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			'xophz/v1',
+			'/stripe/checkout',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_stripe_checkout' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	public function handle_check_email( WP_REST_Request $request ) {
@@ -272,6 +282,81 @@ class Xophz_Compass_Phone_Auth_Rest {
 		return rest_ensure_response( array(
 			'success' => true,
 			'nonce'   => wp_create_nonce( 'wp_rest' ),
+		) );
+	}
+
+	public function handle_stripe_checkout( WP_REST_Request $request ) {
+		$price = (float) $request->get_param( 'price' );
+		$license = sanitize_text_field( (string) $request->get_param( 'license' ) );
+		$success_url = esc_url_raw( (string) $request->get_param( 'success_url' ) );
+		$cancel_url = esc_url_raw( (string) $request->get_param( 'cancel_url' ) );
+
+		if ( empty( $price ) || empty( $license ) ) {
+			return new WP_Error( 'invalid_params', 'Price and license parameters are required.', array( 'status' => 400 ) );
+		}
+
+		// Retrieve Stripe Secret Key from WP options or constants
+		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
+		if ( empty( $stripe_secret_key ) ) {
+			$stripe_secret_key = get_option( 'xophz_compass_stripe_secret_key' );
+		}
+		if ( empty( $stripe_secret_key ) && defined( 'STRIPE_SECRET_KEY' ) ) {
+			$stripe_secret_key = STRIPE_SECRET_KEY;
+		}
+
+		if ( empty( $stripe_secret_key ) ) {
+			return new WP_Error( 'missing_stripe_key', 'Stripe Secret Key is missing in WordPress Settings (compass_stripe_secret_key).', array( 'status' => 500 ) );
+		}
+
+		$unit_amount = (int) round( $price * 100 ); // Amount in cents
+		$license_lower = strtolower( $license );
+		$is_subscription = ( strpos( $license_lower, 'monthly' ) !== false || strpos( $license_lower, 'engine' ) !== false || strpos( $license_lower, 'castle' ) !== false || strpos( $license_lower, 'sovereign' ) !== false || $price >= 99 );
+		$is_castle = ( strpos( $license_lower, 'castle' ) !== false || strpos( $license_lower, 'enterprise' ) !== false || $price >= 3000 );
+		$mode = $is_subscription ? 'subscription' : 'payment';
+
+		$body = array(
+			'line_items[0][price_data][currency]' => 'usd',
+			'line_items[0][price_data][product_data][name]' => 'My Compass - ' . $license,
+			'line_items[0][price_data][product_data][tax_code]' => 'txcd_10103000',
+			'line_items[0][price_data][unit_amount]' => $unit_amount,
+			'line_items[0][quantity]' => 1,
+			'mode' => $mode,
+			'success_url' => ! empty( $success_url ) ? $success_url : home_url( '/#/checkout_success' ),
+			'cancel_url' => ! empty( $cancel_url ) ? $cancel_url : home_url( '/#/pricing' ),
+		);
+
+		if ( $is_subscription ) {
+			$body['line_items[0][price_data][recurring][interval]'] = 'month';
+		}
+
+		if ( $is_castle ) {
+			// Automatically stop recurring billing after 6 months for Enterprise engagements
+			$body['subscription_data[cancel_at]'] = strtotime( '+6 months' );
+		}
+
+		$response = wp_remote_post( 'https://api.stripe.com/v1/checkout/sessions', array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . trim( $stripe_secret_key ),
+				'Content-Type'  => 'application/x-www-form-urlencoded',
+			),
+			'body'    => http_build_query( $body ),
+			'timeout' => 15,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error( 'stripe_connection_error', 'Failed to connect to Stripe API: ' . $response->get_error_message(), array( 'status' => 500 ) );
+		}
+
+		$body_res = wp_remote_retrieve_body( $response );
+		$data = json_decode( $body_res, true );
+
+		if ( wp_remote_retrieve_response_code( $response ) !== 200 || empty( $data['url'] ) ) {
+			$err_msg = isset( $data['error']['message'] ) ? $data['error']['message'] : 'Stripe API returned an invalid response.';
+			return new WP_Error( 'stripe_api_error', 'Stripe error: ' . $err_msg, array( 'status' => 500 ) );
+		}
+
+		return rest_ensure_response( array(
+			'url' => $data['url'],
 		) );
 	}
 }
