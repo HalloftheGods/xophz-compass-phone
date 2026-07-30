@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('./sw.js', { scope: './' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/wp-content/plugins/xophz-compass-phone/public/dist/sw.js', { scope: '/wp-content/plugins/xophz-compass-phone/public/dist/' })})}
