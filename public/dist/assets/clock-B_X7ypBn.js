@@ -1,4 +1,4 @@
-import{c}from"./index-B5Y6u1xi.js";/**
+import{c}from"./createLucideIcon-BivqJ7bi.js";/**
  * @license lucide-vue-next v1.0.0 - ISC
  *
  * This source code is licensed under the ISC license.
