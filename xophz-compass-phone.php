@@ -153,6 +153,8 @@ class Xophz_Compass_Phone {
                 // Rewrite absolute paths for production assets
                 $content = str_replace( '"/assets/', '"' . $dist_url . 'assets/', $content );
                 $content = str_replace( "'/assets/", "'" . $dist_url . "assets/", $content );
+                $content = str_replace( '"/registerSW.js"', '"' . $dist_url . 'registerSW.js"', $content );
+                $content = str_replace( '"/manifest.webmanifest"', '"' . $dist_url . 'manifest.webmanifest"', $content );
                 $content = str_replace( '"/vite.svg"', '"' . $dist_url . 'vite.svg"', $content );
                 
                 // Inject wpApiSettings for production so API requests have the nonce
