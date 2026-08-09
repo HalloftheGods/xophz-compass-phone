@@ -13,6 +13,12 @@ class Xophz_Compass_Phone_Auth_Rest {
 	}
 
 	public function register_routes() {
+		add_action( 'set_logged_in_cookie', function( $logged_in_cookie ) {
+			if ( defined( 'LOGGED_IN_COOKIE' ) ) {
+				$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
+			}
+		}, 10, 1 );
+
 		$namespace = 'compass-phone/v1';
 
 		register_rest_route(

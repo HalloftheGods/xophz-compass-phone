@@ -1,11 +1,10 @@
 <?php
 /**
- * Plugin Name:       My Compass Phone
- * Description:       Standalone WordPress backend and router for the My Compass Phone web app.
+ * Plugin Name:       My Compass Phone App
+ * Description:       Standalone backend and router for the My Compass Phone web app.
  * Version:           26.8.6
  * Author:            Hall of the Gods, Inc.
- * Category:          Command Deck
- * Group:             Ecosystem
+ * Category:          Castle Walls
  * Text Domain:       xophz-compass-phone
  */
 
