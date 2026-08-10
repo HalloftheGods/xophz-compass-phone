@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       My Compass Phone App
  * Description:       Standalone backend and router for the My Compass Phone web app.
- * Version:           26.8.9.633
+ * Version:           26.8.10
  * Author:            Hall of the Gods, Inc.
  * Category:          Castle Walls
  * Text Domain:       xophz-compass-phone
@@ -12,7 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.8.9.633' );
+define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.8.10' );
 define( 'XOPHZ_COMPASS_PHONE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'XOPHZ_COMPASS_PHONE_URL', plugin_dir_url( __FILE__ ) );
 
