@@ -17,6 +17,15 @@ class Xophz_Compass_Phone_Auth_Rest {
 			if ( defined( 'LOGGED_IN_COOKIE' ) ) {
 				$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
 			}
+			if ( defined( 'TEST_COOKIE' ) ) {
+				$_COOKIE[ TEST_COOKIE ] = 'WP Cookie check';
+			}
+		}, 10, 1 );
+
+		add_action( 'set_auth_cookie', function( $auth_cookie ) {
+			if ( defined( 'AUTH_COOKIE' ) ) {
+				$_COOKIE[ AUTH_COOKIE ] = $auth_cookie;
+			}
 		}, 10, 1 );
 
 		$namespace = 'compass-phone/v1';
@@ -128,13 +137,21 @@ class Xophz_Compass_Phone_Auth_Rest {
 			return new WP_Error( 'missing_credentials', 'Email/username and password are required.', array( 'status' => 400 ) );
 		}
 
+		if ( defined( 'TEST_COOKIE' ) ) {
+			$_COOKIE[ TEST_COOKIE ] = 'WP Cookie check';
+		}
+
 		$user = wp_authenticate_username_password( null, $login, $password );
 		if ( is_wp_error( $user ) ) {
 			$user = wp_authenticate_email_password( null, $login, $password );
 		}
 
 		if ( is_wp_error( $user ) ) {
-			return new WP_Error( 'invalid_login', 'Invalid password. Please check your credentials and try again.', array( 'status' => 401 ) );
+			$err_msg = $user->get_error_message();
+			if ( empty( $err_msg ) ) {
+				$err_msg = 'Invalid password. Please check your credentials and try again.';
+			}
+			return new WP_Error( 'invalid_login', $err_msg, array( 'status' => 401 ) );
 		}
 
 		wp_set_current_user( $user->ID );
@@ -233,6 +250,10 @@ class Xophz_Compass_Phone_Auth_Rest {
 			}
 
 			$user = get_user_by( 'id', $user_id );
+		}
+
+		if ( defined( 'TEST_COOKIE' ) ) {
+			$_COOKIE[ TEST_COOKIE ] = 'WP Cookie check';
 		}
 
 		delete_transient( 'compass_magic_' . $token );
