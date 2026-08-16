@@ -110,34 +110,34 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "url": "webfonts/fa-brands-400.svg",
     "revision": "5bfa00172e97473860a96f18b340f3f5"
   }, {
-    "url": "assets/zap-Dm8yR0tN.js",
+    "url": "assets/zap-DrzMvWeP.js",
     "revision": null
   }, {
-    "url": "assets/user-plus-CsaqFRr-.js",
+    "url": "assets/user-plus-DiGwquQ8.js",
     "revision": null
   }, {
-    "url": "assets/useQuestbookStore-CYRH_yrb.js",
+    "url": "assets/useQuestbookStore-hUukR0W9.js",
     "revision": null
   }, {
-    "url": "assets/useQuestbookClientStore-tf-V98d_.js",
+    "url": "assets/useQuestbookClientStore-IO45kctv.js",
     "revision": null
   }, {
-    "url": "assets/search-BRnqk1Bb.js",
+    "url": "assets/search-rHt0sbBC.js",
     "revision": null
   }, {
-    "url": "assets/message-square-ZalbC2vg.js",
+    "url": "assets/message-square-D3XO3szm.js",
+    "revision": null
+  }, {
+    "url": "assets/index-DY97Lu8G.js",
     "revision": null
   }, {
     "url": "assets/index-CCNxAYSI.css",
     "revision": null
   }, {
-    "url": "assets/index-C8fQKfpU.js",
+    "url": "assets/inbox-BLqY8ffu.js",
     "revision": null
   }, {
-    "url": "assets/inbox-BAXCUajf.js",
-    "revision": null
-  }, {
-    "url": "assets/folder-lock-frMrjbq9.js",
+    "url": "assets/folder-lock-Bh1MuqKk.js",
     "revision": null
   }, {
     "url": "assets/fa-solid-900-zJJCaBLX.svg",
@@ -170,97 +170,127 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "url": "assets/fa-brands-400-BoGazL5X.woff2",
     "revision": null
   }, {
-    "url": "assets/credit-card-C0bPm77Z.js",
+    "url": "assets/credit-card-CnYnjdtQ.js",
     "revision": null
   }, {
-    "url": "assets/createLucideIcon-DxABtV7k.js",
+    "url": "assets/createLucideIcon-BOlHSZlD.js",
     "revision": null
   }, {
-    "url": "assets/clock-Du_hli7R.js",
+    "url": "assets/clock-DEmqAzWX.js",
     "revision": null
   }, {
-    "url": "assets/circle-check-ksgBINjt.js",
+    "url": "assets/circle-check-FR2Jj0AO.js",
     "revision": null
   }, {
-    "url": "assets/calendar-Bkd2rOzr.js",
+    "url": "assets/calendar-Bd3bd1bH.js",
     "revision": null
   }, {
-    "url": "assets/book-user-C7AxHQGA.js",
-    "revision": null
-  }, {
-    "url": "assets/SmokeBackground-OZAIwqWg.js",
+    "url": "assets/book-user-CkADFSb0.js",
     "revision": null
   }, {
     "url": "assets/SmokeBackground-C0OZjQT_.css",
     "revision": null
   }, {
+    "url": "assets/SmokeBackground-BXV8ZuQO.js",
+    "revision": null
+  }, {
     "url": "assets/QuestbookSettingsView-jbgt23n2.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookSettingsView-D8DDtw4O.js",
+    "url": "assets/QuestbookSettingsView-CmjZwMiR.js",
     "revision": null
   }, {
     "url": "assets/QuestbookPipelineView-EAcSSsYG.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookPipelineView-B8EvcxTx.js",
+    "url": "assets/QuestbookPipelineView-CCTdoZdA.js",
     "revision": null
   }, {
     "url": "assets/QuestbookOnboardView-b0iJmk01.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookOnboardView-CrNY8PGL.js",
-    "revision": null
-  }, {
-    "url": "assets/QuestbookInboxView-CsuzBzRP.js",
+    "url": "assets/QuestbookOnboardView-SzjXiFB2.js",
     "revision": null
   }, {
     "url": "assets/QuestbookInboxView-CbAUomJR.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookDirectoryView-CEKfCjji.js",
+    "url": "assets/QuestbookInboxView-CRB8XIkJ.js",
+    "revision": null
+  }, {
+    "url": "assets/QuestbookDirectoryView-DYSk40uQ.js",
     "revision": null
   }, {
     "url": "assets/QuestbookDirectoryView-BZmyiEZX.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookCalendarView-eMVMoi9F.js",
-    "revision": null
-  }, {
     "url": "assets/QuestbookCalendarView-D9SaP0w1.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookActivityView-CCJ79vLE.js",
+    "url": "assets/QuestbookCalendarView-Czmt_OtN.js",
+    "revision": null
+  }, {
+    "url": "assets/QuestbookActivityView-CDvX1TCd.js",
     "revision": null
   }, {
     "url": "assets/QuestbookActivityView-BMi_lZwG.css",
     "revision": null
   }, {
-    "url": "assets/PricingView-B9FHwIN2.js",
+    "url": "assets/PricingView-QLnIz_za.js",
     "revision": null
   }, {
     "url": "assets/PricingView-B-I23q2H.css",
     "revision": null
   }, {
-    "url": "assets/PresentationView-Dw2xFDpy.js",
+    "url": "assets/PresentationView-PyQD49LL.js",
     "revision": null
   }, {
-    "url": "assets/PresentationView-DIm23C0Y.css",
+    "url": "assets/PresentationView-Cx7YOefk.css",
     "revision": null
   }, {
-    "url": "assets/ClientVaultView-CUJuvWE0.js",
+    "url": "assets/ClientVaultView-DJ67he8y.js",
+    "revision": null
+  }, {
+    "url": "assets/ClientTasksView-DsvSmTVv.js",
     "revision": null
   }, {
     "url": "assets/ClientTasksView-D20vEXKn.css",
     "revision": null
   }, {
-    "url": "assets/ClientTasksView-ClHapIn-.js",
+    "url": "assets/ClientMessagesView-D2HegmOy.js",
     "revision": null
   }, {
-    "url": "assets/ClientMessagesView-CUrPTXyg.js",
+    "url": "assets/ClientBillingView-BIlWhjRF.js",
     "revision": null
   }, {
-    "url": "assets/ClientBillingView-Che2Up7t.js",
+    "url": "assets/BazaarProductsView-KFegLKiT.css",
+    "revision": null
+  }, {
+    "url": "assets/BazaarProductsView-BgLLgRKh.js",
+    "revision": null
+  }, {
+    "url": "assets/BazaarProcurementView-tSWx5m_z.css",
+    "revision": null
+  }, {
+    "url": "assets/BazaarProcurementView-Dc58koR3.js",
+    "revision": null
+  }, {
+    "url": "assets/BazaarPosView-DrH3BE6n.js",
+    "revision": null
+  }, {
+    "url": "assets/BazaarPosView-BywpnqlM.css",
+    "revision": null
+  }, {
+    "url": "assets/BazaarOrdersView-zaWxgHj_.js",
+    "revision": null
+  }, {
+    "url": "assets/BazaarOrdersView-DjRTqT4q.css",
+    "revision": null
+  }, {
+    "url": "assets/BazaarDashView-lscdXiPK.css",
+    "revision": null
+  }, {
+    "url": "assets/BazaarDashView-NcA05M4J.js",
     "revision": null
   }, {
     "url": "manifest.webmanifest",
