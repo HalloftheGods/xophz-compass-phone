@@ -91,11 +91,45 @@ class Xophz_Compass_Phone_Auth_Rest {
 		);
 
 		register_rest_route(
-			'xophz/v1',
-			'/stripe/checkout',
+			$namespace,
+			'/settings',
+			array(
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'handle_get_settings' ),
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => 'PUT',
+					'callback'            => array( $this, 'handle_update_settings' ),
+					'permission_callback' => array( $this, 'admin_permissions_check' ),
+				)
+			)
+		);
+
+		register_rest_route(
+			$namespace,
+			'/stats',
+			array(
+				array(
+					'methods'             => 'GET',
+					'callback'            => array( $this, 'handle_get_stats' ),
+					'permission_callback' => '__return_true',
+				),
+				array(
+					'methods'             => 'DELETE',
+					'callback'            => array( $this, 'handle_reset_stats' ),
+					'permission_callback' => array( $this, 'admin_permissions_check' ),
+				)
+			)
+		);
+
+		register_rest_route(
+			$namespace,
+			'/track',
 			array(
 				'methods'             => 'POST',
-				'callback'            => array( $this, 'handle_stripe_checkout' ),
+				'callback'            => array( $this, 'handle_track_event' ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -385,6 +419,134 @@ class Xophz_Compass_Phone_Auth_Rest {
 		return rest_ensure_response( array(
 			'url' => $data['url'],
 		) );
+	}
+
+	public function admin_permissions_check() {
+		return current_user_can( 'manage_options' );
+	}
+
+	public function handle_get_settings() {
+		$slug = get_option( 'xophz_compass_phone_custom_slug', 'my-compass-phone' );
+		$allowed = get_option( '_xophz_compass_phone_allowed_apps', array(
+			'glowitheflow', 'xp', 'yellow-links', 'enchiridion', 'lead-magnet',
+			'magic-formula', 'questbook', 'treasure-map', 'gale-boomerang',
+			'titans-mitt', 'midnight-nerd', 'my-planner', 'pixie-dust', 'phantom-zone'
+		) );
+		$theme = get_option( '_xophz_compass_phone_theme', 'starship' );
+
+		return rest_ensure_response( array(
+			'success' => true,
+			'data'    => array(
+				'slug'         => $slug,
+				'allowed_apps' => is_array( $allowed ) ? $allowed : array(),
+				'theme'        => $theme,
+			)
+		) );
+	}
+
+	public function handle_update_settings( WP_REST_Request $request ) {
+		$slug = sanitize_title( (string) $request->get_param( 'slug' ) );
+		$allowed_apps = $request->get_param( 'allowed_apps' );
+		$theme = sanitize_text_field( (string) $request->get_param( 'theme' ) );
+
+		if ( ! empty( $slug ) ) {
+			$old_slug = get_option( 'xophz_compass_phone_custom_slug', 'my-compass-phone' );
+			update_option( 'xophz_compass_phone_custom_slug', $slug );
+			if ( $old_slug !== $slug ) {
+				flush_rewrite_rules();
+			}
+		}
+
+		if ( is_array( $allowed_apps ) ) {
+			$clean_apps = array_map( 'sanitize_text_field', $allowed_apps );
+			update_option( '_xophz_compass_phone_allowed_apps', $clean_apps );
+		}
+
+		if ( ! empty( $theme ) ) {
+			update_option( '_xophz_compass_phone_theme', $theme );
+		}
+
+		return $this->handle_get_settings();
+	}
+
+	public function handle_get_stats() {
+		$stats = get_option( '_xophz_compass_phone_stats', array(
+			'total_views'  => 0,
+			'total_clicks' => 0,
+			'app_clicks'   => array(),
+			'daily'        => array()
+		) );
+
+		if ( ! is_array( $stats ) ) {
+			$stats = array(
+				'total_views'  => 0,
+				'total_clicks' => 0,
+				'app_clicks'   => array(),
+				'daily'        => array()
+			);
+		}
+
+		return rest_ensure_response( array(
+			'success' => true,
+			'data'    => $stats
+		) );
+	}
+
+	public function handle_track_event( WP_REST_Request $request ) {
+		$event = sanitize_text_field( (string) $request->get_param( 'event' ) );
+		$app = sanitize_text_field( (string) $request->get_param( 'app' ) );
+		$today = date( 'Y-m-d' );
+
+		$stats = get_option( '_xophz_compass_phone_stats', array(
+			'total_views'  => 0,
+			'total_clicks' => 0,
+			'app_clicks'   => array(),
+			'daily'        => array()
+		) );
+
+		if ( ! is_array( $stats ) ) {
+			$stats = array(
+				'total_views'  => 0,
+				'total_clicks' => 0,
+				'app_clicks'   => array(),
+				'daily'        => array()
+			);
+		}
+
+		if ( ! isset( $stats['daily'][ $today ] ) ) {
+			$stats['daily'][ $today ] = array( 'views' => 0, 'clicks' => 0 );
+		}
+
+		if ( $event === 'view' ) {
+			$stats['total_views']++;
+			$stats['daily'][ $today ]['views']++;
+		} elseif ( $event === 'click' ) {
+			$stats['total_clicks']++;
+			$stats['daily'][ $today ]['clicks']++;
+			if ( ! empty( $app ) ) {
+				if ( ! isset( $stats['app_clicks'][ $app ] ) ) {
+					$stats['app_clicks'][ $app ] = 0;
+				}
+				$stats['app_clicks'][ $app ]++;
+			}
+		}
+
+		// Keep 30 days of daily history
+		if ( count( $stats['daily'] ) > 30 ) {
+			$stats['daily'] = array_slice( $stats['daily'], -30, 30, true );
+		}
+
+		update_option( '_xophz_compass_phone_stats', $stats );
+
+		return rest_ensure_response( array(
+			'success' => true,
+			'data'    => $stats
+		) );
+	}
+
+	public function handle_reset_stats() {
+		delete_option( '_xophz_compass_phone_stats' );
+		return $this->handle_get_stats();
 	}
 }
 
