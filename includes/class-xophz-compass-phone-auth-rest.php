@@ -390,9 +390,8 @@ class Xophz_Compass_Phone_Auth_Rest {
 			$body['line_items[0][price_data][recurring][interval]'] = 'month';
 		}
 
-		if ( $is_castle ) {
-			// Automatically stop recurring billing after 6 months for Enterprise engagements
-			$body['subscription_data[cancel_at]'] = strtotime( '+6 months' );
+		if ( $is_castle && $is_subscription ) {
+			$body['subscription_data[metadata][contract_term]'] = '6_months_enterprise';
 		}
 
 		$response = wp_remote_post( 'https://api.stripe.com/v1/checkout/sessions', array(
