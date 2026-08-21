@@ -133,6 +133,26 @@ class Xophz_Compass_Phone_Auth_Rest {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			$namespace,
+			'/stripe/checkout',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_stripe_checkout' ),
+				'permission_callback' => '__return_true',
+			)
+		);
+
+		register_rest_route(
+			'xophz/v1',
+			'/stripe/checkout',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_stripe_checkout' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	public function handle_check_email( WP_REST_Request $request ) {
