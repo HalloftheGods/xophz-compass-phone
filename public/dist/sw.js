@@ -110,34 +110,34 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "url": "webfonts/fa-brands-400.svg",
     "revision": "5bfa00172e97473860a96f18b340f3f5"
   }, {
-    "url": "assets/zap-B5eTrf3T.js",
+    "url": "assets/zap-BldqUUYQ.js",
     "revision": null
   }, {
-    "url": "assets/user-plus-zACKl5NY.js",
+    "url": "assets/user-plus-CzMKCf-Q.js",
     "revision": null
   }, {
-    "url": "assets/useQuestbookStore-BjiOX6Lo.js",
+    "url": "assets/useQuestbookStore-DZcQ_5i3.js",
     "revision": null
   }, {
-    "url": "assets/useQuestbookClientStore-CewOYf1i.js",
+    "url": "assets/useQuestbookClientStore-CDQklfVU.js",
     "revision": null
   }, {
-    "url": "assets/search-DXrZ8btp.js",
+    "url": "assets/search-RXqVfO1V.js",
     "revision": null
   }, {
-    "url": "assets/message-square-CB4l7079.js",
-    "revision": null
-  }, {
-    "url": "assets/index-y2P5aDJm.js",
+    "url": "assets/message-square-DUw_5cuo.js",
     "revision": null
   }, {
     "url": "assets/index-CCNxAYSI.css",
     "revision": null
   }, {
-    "url": "assets/inbox-SwIlXkBB.js",
+    "url": "assets/index-BxYZKXNU.js",
     "revision": null
   }, {
-    "url": "assets/folder-lock-DdcO7Ttc.js",
+    "url": "assets/inbox-BarThvAW.js",
+    "revision": null
+  }, {
+    "url": "assets/folder-lock-B8glV5b_.js",
     "revision": null
   }, {
     "url": "assets/fa-solid-900-zJJCaBLX.svg",
@@ -170,25 +170,25 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "url": "assets/fa-brands-400-BoGazL5X.woff2",
     "revision": null
   }, {
-    "url": "assets/credit-card-Bz0QcGNc.js",
+    "url": "assets/credit-card-ngK9zsJS.js",
     "revision": null
   }, {
-    "url": "assets/createLucideIcon-CSNvWkD3.js",
+    "url": "assets/createLucideIcon-B0E2MpZE.js",
     "revision": null
   }, {
-    "url": "assets/clock-ChK-Ypjs.js",
+    "url": "assets/clock-Dag1Wghn.js",
     "revision": null
   }, {
-    "url": "assets/circle-check-DB-w5iUe.js",
+    "url": "assets/circle-check-Dalz8S8w.js",
     "revision": null
   }, {
-    "url": "assets/calendar-Dd9xJGvQ.js",
+    "url": "assets/calendar-DAjqmSGi.js",
     "revision": null
   }, {
-    "url": "assets/book-user-fGJfeNb1.js",
+    "url": "assets/book-user-DUUs3K2U.js",
     "revision": null
   }, {
-    "url": "assets/SmokeBackground-zZ0m1sei.js",
+    "url": "assets/SmokeBackground-DkKjWyml.js",
     "revision": null
   }, {
     "url": "assets/SmokeBackground-C0OZjQT_.css",
@@ -197,100 +197,100 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "url": "assets/QuestbookSettingsView-jbgt23n2.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookSettingsView-5vnLQTga.js",
+    "url": "assets/QuestbookSettingsView-C7hySBoJ.js",
     "revision": null
   }, {
     "url": "assets/QuestbookPipelineView-EAcSSsYG.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookPipelineView-DO3TqRx2.js",
+    "url": "assets/QuestbookPipelineView-CuPQkgLD.js",
+    "revision": null
+  }, {
+    "url": "assets/QuestbookOnboardView-ysUpiusf.js",
     "revision": null
   }, {
     "url": "assets/QuestbookOnboardView-b0iJmk01.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookOnboardView-DXI039pM.js",
+    "url": "assets/QuestbookInboxView-Cw3RrMTL.js",
     "revision": null
   }, {
     "url": "assets/QuestbookInboxView-CbAUomJR.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookInboxView-BmmaRcL9.js",
+    "url": "assets/QuestbookDirectoryView-CQj2C4mN.js",
     "revision": null
   }, {
     "url": "assets/QuestbookDirectoryView-BZmyiEZX.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookDirectoryView-BYahqE7D.js",
-    "revision": null
-  }, {
-    "url": "assets/QuestbookCalendarView-tD81N1sn.js",
-    "revision": null
-  }, {
     "url": "assets/QuestbookCalendarView-D9SaP0w1.css",
+    "revision": null
+  }, {
+    "url": "assets/QuestbookCalendarView-Bx4JyZ6b.js",
+    "revision": null
+  }, {
+    "url": "assets/QuestbookActivityView-C_Eac-TO.js",
     "revision": null
   }, {
     "url": "assets/QuestbookActivityView-BMi_lZwG.css",
     "revision": null
   }, {
-    "url": "assets/QuestbookActivityView-4Lkn2Kpd.js",
-    "revision": null
-  }, {
-    "url": "assets/PricingView-G5dzPjuH.js",
+    "url": "assets/PricingView-CzPHKvFU.js",
     "revision": null
   }, {
     "url": "assets/PricingView-B-I23q2H.css",
     "revision": null
   }, {
-    "url": "assets/PresentationView-H49Ifev9.js",
+    "url": "assets/PresentationView-DAndfkfF.css",
     "revision": null
   }, {
-    "url": "assets/PresentationView-D2x_pBzQ.css",
+    "url": "assets/PresentationView-BlI3wwHo.js",
     "revision": null
   }, {
-    "url": "assets/ClientVaultView-CkVOyAli.js",
+    "url": "assets/ClientVaultView-BIkrLOe9.js",
     "revision": null
   }, {
-    "url": "assets/ClientTasksView-r8f9edfl.js",
+    "url": "assets/ClientTasksView-Dp2KYyO4.js",
     "revision": null
   }, {
     "url": "assets/ClientTasksView-D20vEXKn.css",
     "revision": null
   }, {
-    "url": "assets/ClientMessagesView-CT1ioNvj.js",
+    "url": "assets/ClientMessagesView-DTZ9Oguo.js",
     "revision": null
   }, {
-    "url": "assets/ClientBillingView-7vHhaa-c.js",
+    "url": "assets/ClientBillingView-dWz0dwlk.js",
     "revision": null
   }, {
     "url": "assets/BazaarProductsView-KFegLKiT.css",
     "revision": null
   }, {
-    "url": "assets/BazaarProductsView-D1HxN3tz.js",
+    "url": "assets/BazaarProductsView-DL2EooHH.js",
     "revision": null
   }, {
     "url": "assets/BazaarProcurementView-tSWx5m_z.css",
     "revision": null
   }, {
-    "url": "assets/BazaarProcurementView-CArutwcV.js",
+    "url": "assets/BazaarProcurementView-g02ADa8t.js",
+    "revision": null
+  }, {
+    "url": "assets/BazaarPosView-CEneyIQa.js",
     "revision": null
   }, {
     "url": "assets/BazaarPosView-BywpnqlM.css",
     "revision": null
   }, {
-    "url": "assets/BazaarPosView-Bb8Dnb5s.js",
-    "revision": null
-  }, {
     "url": "assets/BazaarOrdersView-DjRTqT4q.css",
     "revision": null
   }, {
-    "url": "assets/BazaarOrdersView-1bjOX8ZN.js",
+    "url": "assets/BazaarOrdersView-DhDwH-n2.js",
     "revision": null
   }, {
     "url": "assets/BazaarDashView-lscdXiPK.css",
     "revision": null
   }, {
-    "url": "assets/BazaarDashView-Csf1uBpv.js",
+    "url": "assets/BazaarDashView-C06hPc6O.js",
     "revision": null
   }, {
     "url": "manifest.webmanifest",
