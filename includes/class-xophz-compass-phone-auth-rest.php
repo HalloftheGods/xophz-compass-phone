@@ -183,8 +183,51 @@ class Xophz_Compass_Phone_Auth_Rest {
 		) );
 	}
 
+	private function strip_captcha_filters() {
+		remove_filter( 'authenticate', 'wp_authenticate_application_password', 20 );
+
+		global $wp_filter;
+		$filters_to_clean = array( 'authenticate', 'wp_authenticate_user', 'wp_authenticate' );
+		foreach ( $filters_to_clean as $filter_name ) {
+			if ( ! isset( $wp_filter[ $filter_name ] ) ) {
+				continue;
+			}
+
+			$callbacks_by_priority = $wp_filter[ $filter_name ]->callbacks;
+			foreach ( $callbacks_by_priority as $priority => $callbacks ) {
+				foreach ( $callbacks as $id => $callback ) {
+					$is_captcha = false;
+					$func = $callback['function'] ?? null;
+
+					if ( is_array( $func ) ) {
+						$class_name  = is_object( $func[0] ) ? get_class( $func[0] ) : ( is_string( $func[0] ) ? $func[0] : '' );
+						$method_name = is_string( $func[1] ) ? $func[1] : '';
+
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $class_name ) ||
+						     preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender/i', $method_name ) ) {
+							$is_captcha = true;
+						}
+					} elseif ( is_string( $func ) ) {
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $func ) ) {
+							$is_captcha = true;
+						}
+					} elseif ( is_object( $func ) && ! ( $func instanceof \Closure ) ) {
+						$class_name = get_class( $func );
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $class_name ) ) {
+							$is_captcha = true;
+						}
+					}
+
+					if ( $is_captcha ) {
+						remove_filter( $filter_name, $callback['function'], $priority );
+					}
+				}
+			}
+		}
+	}
+
 	public function handle_login( WP_REST_Request $request ) {
-		$login = trim( (string) $request->get_param( 'email' ) );
+		$login = trim( (string) ( $request->get_param( 'email' ) ?: $request->get_param( 'login' ) ?: $request->get_param( 'username' ) ) );
 		$password = (string) $request->get_param( 'password' );
 
 		if ( empty( $login ) || empty( $password ) ) {
@@ -195,17 +238,36 @@ class Xophz_Compass_Phone_Auth_Rest {
 			$_COOKIE[ TEST_COOKIE ] = 'WP Cookie check';
 		}
 
-		$user = wp_authenticate_username_password( null, $login, $password );
-		if ( is_wp_error( $user ) ) {
-			$user = wp_authenticate_email_password( null, $login, $password );
+		$this->strip_captcha_filters();
+
+		$user = null;
+		if ( is_email( $login ) ) {
+			$user = get_user_by( 'email', $login );
+		}
+		if ( ! $user ) {
+			$user = get_user_by( 'login', $login );
+		}
+		if ( ! $user && ! is_email( $login ) ) {
+			$user = get_user_by( 'email', $login );
 		}
 
-		if ( is_wp_error( $user ) ) {
-			$err_msg = $user->get_error_message();
-			if ( empty( $err_msg ) ) {
-				$err_msg = 'Invalid password. Please check your credentials and try again.';
+		if ( ! $user ) {
+			return new WP_Error( 'invalid_login', 'Invalid username or email address.', array( 'status' => 401 ) );
+		}
+
+		if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
+			return new WP_Error( 'invalid_login', 'Invalid password. Please check your credentials and try again.', array( 'status' => 401 ) );
+		}
+
+		$filtered_user = apply_filters( 'wp_authenticate_user', $user, $password );
+		if ( is_wp_error( $filtered_user ) ) {
+			$error_code = $filtered_user->get_error_code();
+			if ( stripos( $error_code, 'turnstile' ) === false && stripos( $error_code, 'captcha' ) === false && stripos( $error_code, 'invalid_captcha' ) === false ) {
+				$err_msg = $filtered_user->get_error_message();
+				return new WP_Error( 'invalid_login', ! empty( $err_msg ) ? $err_msg : 'Authentication failed.', array( 'status' => 401 ) );
 			}
-			return new WP_Error( 'invalid_login', $err_msg, array( 'status' => 401 ) );
+		} else {
+			$user = $filtered_user;
 		}
 
 		wp_set_current_user( $user->ID );
