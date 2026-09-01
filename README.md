@@ -55,7 +55,7 @@ All authentication endpoints are registered under the `compass-phone/v1` namespa
 | `POST` | `/wp-json/compass-phone/v1/send-magic-link` | Dispatch a 6-digit OTP code and Magic Link to the provided email address. | `{ "email": "user@example.com" }` |
 | `POST` | `/wp-json/compass-phone/v1/verify-magic-link` | Verify a 6-digit OTP code or Magic Link token. Auto-creates account if new user. | `{ "token": "123456" }` |
 | `GET`  | `/wp-json/compass-phone/v1/me` | Fetch active user session details, role list, display name, and updated REST nonce. | Header: `X-WP-Nonce` or Cookie |
-| `POST` | `/wp-json/compass-phone/v1/logout` | Terminate user session, clear auth cookies, and return guest REST nonce. | — |
+| `POST` | `/wp-json/compass-phone/v1/logout` | Terminate user session, clear auth cookies, and return guest REST nonce. | - |
 
 ---
 
