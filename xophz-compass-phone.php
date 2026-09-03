@@ -182,3 +182,18 @@ function xophz_compass_phone_activate() {
     flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'xophz_compass_phone_activate' );
+
+function xophz_compass_phone_action_links( $links ) {
+    foreach ( $links as $link ) {
+        if ( stripos( $link, '>Settings<' ) !== false ) {
+            return $links;
+        }
+    }
+    $settings_link = '<a href="options-general.php?page=xophz-compass-phone">' . __( 'Settings', 'xophz-compass-phone' ) . '</a>';
+    $new_links = array( 'settings' => $settings_link );
+    foreach ( $links as $key => $value ) {
+        $new_links[ $key ] = $value;
+    }
+    return $new_links;
+}
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'xophz_compass_phone_action_links' );
