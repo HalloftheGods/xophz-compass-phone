@@ -562,6 +562,20 @@ class Xophz_Compass_Phone_Auth_Rest {
 			$body['line_items[0][price_data][recurring][interval]'] = 'month';
 		}
 
+		// For White Glove service, add the one-time setup & onboarding fee ($749)
+		if ( ! $is_diy ) {
+			$body['line_items[1][price_data][currency]']          = 'usd';
+			$body['line_items[1][price_data][product_data][name]'] = 'White Glove Setup & Onboarding Fee';
+			$body['line_items[1][price_data][product_data][tax_code]'] = 'txcd_10103000';
+			$body['line_items[1][price_data][unit_amount]']        = 74900; // $749.00 in cents
+			$body['line_items[1][quantity]']                       = 1;
+		}
+
+		if ( ! empty( $tier_param ) ) {
+			$body['metadata[tier]'] = $tier_param;
+			$body['metadata[plan]'] = $is_diy ? 'diy' : 'whiteglove';
+		}
+
 		if ( $is_castle && $is_subscription ) {
 			$body['subscription_data[metadata][contract_term]'] = '6_months_enterprise';
 		}
