@@ -461,6 +461,14 @@ class Xophz_Compass_Phone_Auth_Rest {
 			'palladium-enhanced' => array( 'name' => 'Palladium Enhanced', 'diy_price' => 4999.00, 'white_glove_price' => 4999.00, 'hours' => 30 ),
 			'rhodium'            => array( 'name' => 'Rhodium', 'diy_price' => 7500.00, 'white_glove_price' => 7500.00, 'hours' => 40 ),
 			'iridium'            => array( 'name' => 'Iridium', 'diy_price' => 10000.00, 'white_glove_price' => 10000.00, 'hours' => 50 ),
+			// WPMU DEV Dedicated Hosting Plan Aliases
+			'bronze-plus'        => array( 'name' => 'Bronze Plus', 'diy_price' => 15.00, 'white_glove_price' => 299.00, 'hours' => 2 ),
+			'bronze-max'         => array( 'name' => 'Bronze Max', 'diy_price' => 23.00, 'white_glove_price' => 299.00, 'hours' => 2 ),
+			'silver-plus'        => array( 'name' => 'Silver Plus', 'diy_price' => 35.00, 'white_glove_price' => 399.00, 'hours' => 3 ),
+			'silver-max'         => array( 'name' => 'Silver Max', 'diy_price' => 45.00, 'white_glove_price' => 599.00, 'hours' => 4 ),
+			'gold-plus'          => array( 'name' => 'Gold Plus', 'diy_price' => 150.00, 'white_glove_price' => 999.00, 'hours' => 6 ),
+			'platinum-plus'      => array( 'name' => 'Platinum Plus', 'diy_price' => 200.00, 'white_glove_price' => 1799.00, 'hours' => 10 ),
+			'uranium-plus'       => array( 'name' => 'Uranium Plus', 'diy_price' => 300.00, 'white_glove_price' => 2499.00, 'hours' => 15 ),
 		);
 
 		if ( ! empty( $tier_param ) && isset( $tier_catalog[ $tier_param ] ) ) {
