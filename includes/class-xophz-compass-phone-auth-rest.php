@@ -469,6 +469,12 @@ class Xophz_Compass_Phone_Auth_Rest {
 			'gold-plus'          => array( 'name' => 'Gold Plus', 'diy_price' => 150.00, 'white_glove_price' => 999.00, 'hours' => 6 ),
 			'platinum-plus'      => array( 'name' => 'Platinum Plus', 'diy_price' => 200.00, 'white_glove_price' => 1799.00, 'hours' => 10 ),
 			'uranium-plus'       => array( 'name' => 'Uranium Plus', 'diy_price' => 300.00, 'white_glove_price' => 2499.00, 'hours' => 15 ),
+			// Chemical X Interactive Architecture Vault
+			'chemical-x/standard' => array( 'name' => 'Chemical X: Standard Vault Access', 'diy_price' => 27.00, 'white_glove_price' => 27.00, 'hours' => 0 ),
+			'chemical-x-standard' => array( 'name' => 'Chemical X: Standard Vault Access', 'diy_price' => 27.00, 'white_glove_price' => 27.00, 'hours' => 0 ),
+			'chemical-x/master'   => array( 'name' => 'Chemical X: VIP Master Bundle', 'diy_price' => 47.00, 'white_glove_price' => 47.00, 'hours' => 0 ),
+			'chemical-x-master'   => array( 'name' => 'Chemical X: VIP Master Bundle', 'diy_price' => 47.00, 'white_glove_price' => 47.00, 'hours' => 0 ),
+			'chemical-x/vip'      => array( 'name' => 'Chemical X: VIP Master Bundle', 'diy_price' => 47.00, 'white_glove_price' => 47.00, 'hours' => 0 ),
 		);
 
 		if ( ! empty( $tier_param ) && isset( $tier_catalog[ $tier_param ] ) ) {
@@ -508,6 +514,30 @@ class Xophz_Compass_Phone_Auth_Rest {
 			$cancel_url = home_url( '/callback/stripe?status=cancel' . $tier_query . $plan_query );
 		}
 
+		// Delegate to Bazaar Checkout Service if active for unified session & ad-hoc ledger logging
+		if ( class_exists( 'Xophz_Bazaar_Checkout_Service' ) ) {
+			$license_lower = strtolower( $license );
+			$is_sub = ( strpos( $license_lower, 'monthly' ) !== false || strpos( $license_lower, 'engine' ) !== false || strpos( $license_lower, 'castle' ) !== false || strpos( $license_lower, 'sovereign' ) !== false || $price >= 99 );
+			$payload = array(
+				'price'        => $price,
+				'license'      => $license,
+				'product_name' => 'My Compass - ' . $license,
+				'mode'         => $is_sub ? 'subscription' : 'payment',
+				'is_diy'       => $is_diy,
+				'success_url'  => $success_url,
+				'cancel_url'   => $cancel_url,
+				'metadata'     => array(
+					'tier'   => $tier_param,
+					'source' => 'phone_auth_rest',
+				),
+			);
+			$res = Xophz_Bazaar_Checkout_Service::create_stripe_session( $payload, $request->get_method() );
+			if ( is_wp_error( $res ) ) {
+				return $res;
+			}
+			return rest_ensure_response( $res );
+		}
+
 		// Retrieve Stripe Secret Key from WP options, constants, or environment
 		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
 		if ( empty( $stripe_secret_key ) ) {
@@ -524,6 +554,10 @@ class Xophz_Compass_Phone_Auth_Rest {
 		}
 		if ( empty( $stripe_secret_key ) && isset( $_ENV['STRIPE_SECRET_KEY'] ) ) {
 			$stripe_secret_key = $_ENV['STRIPE_SECRET_KEY'];
+		}
+		// Fallback to test key if no live key is set
+		if ( empty( $stripe_secret_key ) ) {
+			$stripe_secret_key = get_option( 'compass_stripe_test_secret_key' ) ?: ( defined( 'STRIPE_TEST_SECRET_KEY' ) ? STRIPE_TEST_SECRET_KEY : '' );
 		}
 
 		if ( empty( $stripe_secret_key ) || strpos( $stripe_secret_key, 'sk_test_Mock' ) === 0 ) {
