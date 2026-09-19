@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name:       My Compass Phone App
+ * Plugin URI:        https://phone.mycompassconsulting.com
  * Description:       Standalone backend and router for the My Compass Phone web app.
  * Version:           26.9.17
  * Author:            Hall of the Gods, Inc.
