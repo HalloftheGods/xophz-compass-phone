@@ -10,6 +10,24 @@ if ( ! defined( 'WPINC' ) ) {
 class Xophz_Compass_Phone_Auth_Rest {
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_filter( 'rest_authentication_errors', array( $this, 'bypass_cookie_check_for_phone' ), 999 );
+	}
+
+	/**
+	 * Bypass cookie check errors for compass-phone routes to prevent 403 on stale cookies.
+	 */
+	public function bypass_cookie_check_for_phone( $error ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+		$rest_route  = isset( $GLOBALS['wp']->query_vars['rest_route'] ) ? (string) $GLOBALS['wp']->query_vars['rest_route'] : ( isset( $_GET['rest_route'] ) ? (string) $_GET['rest_route'] : '' );
+		$route_check = $request_uri . ' ' . $rest_route;
+
+		if ( strpos( $route_check, 'compass-phone/v1' ) !== false ) {
+			if ( is_wp_error( $error ) && $error->get_error_code() === 'rest_cookie_invalid_nonce' ) {
+				return null;
+			}
+		}
+
+		return $error;
 	}
 
 	public function register_routes() {
