@@ -18,6 +18,7 @@ define( 'XOPHZ_COMPASS_PHONE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'XOPHZ_COMPASS_PHONE_URL', plugin_dir_url( __FILE__ ) );
 
 require_once XOPHZ_COMPASS_PHONE_PATH . 'includes/class-xophz-compass-phone-connectors.php';
+require_once XOPHZ_COMPASS_PHONE_PATH . 'includes/class-xophz-compass-phone-login-codes.php';
 require_once XOPHZ_COMPASS_PHONE_PATH . 'includes/class-xophz-compass-phone-auth-rest.php';
 
 class Xophz_Compass_Phone {

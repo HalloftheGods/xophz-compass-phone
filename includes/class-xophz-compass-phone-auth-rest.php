@@ -314,30 +314,27 @@ class Xophz_Compass_Phone_Auth_Rest {
 			return new WP_Error( 'invalid_email', 'Please provide a valid email address.', array( 'status' => 400 ) );
 		}
 
-		$user = get_user_by( 'email', $email );
-
-		$token = sprintf( '%06d', wp_rand( 100000, 999999 ) );
-		$token_data = array(
-			'email'   => $email,
-			'user_id' => $user ? $user->ID : 0,
-			'created' => time(),
-		);
-
-		set_transient( 'compass_magic_' . $token, $token_data, 15 * MINUTE_IN_SECONDS );
+		// One live code and link per email, stored hashed; 5 sends per email per hour (#5982).
+		$issued = Xophz_Compass_Phone_Login_Codes::issue( $email );
+		if ( is_wp_error( $issued ) ) {
+			return $issued;
+		}
+		$code = $issued['code'];
 
 		$slug = get_option( 'xophz_compass_phone_custom_slug', 'my-compass-phone' );
-		$magic_url = home_url( '/' . $slug . '?magic_token=' . $token );
+		$magic_url = home_url( '/' . $slug . '?magic_token=' . $issued['link_token'] );
 
 		$subject = 'Your Verification Magic Key  for COMPASS Phone';
-		$message = "Hello,\n\nYour 6-digit verification code is: " . $token . "\n\nOr click the link below to sign in directly:\n" . $magic_url . "\n\nThis code and link will expire in 15 minutes.\n\nIf you didn't request this, please ignore this email.";
+		$message = "Hello,\n\nYour 6-digit verification code is: " . $code . "\n\nOr click the link below to sign in directly:\n" . $magic_url . "\n\nThis code and link will expire in 15 minutes.\n\nIf you didn't request this, please ignore this email.";
 		$headers = array('Content-Type: text/plain; charset=UTF-8');
 		@wp_mail( $email, $subject, $message, $headers );
 
+		// The same response whether or not the email has an account, so it cannot be used to
+		// enumerate accounts.
 		$response = array(
-			'success'     => true,
-			'is_new_user' => ! (bool) $user,
-			'email'       => $email,
-			'message'     => 'Verification code & magic link sent! Please check your email inbox.',
+			'success' => true,
+			'email'   => $email,
+			'message' => 'Verification code & magic link sent! Please check your email inbox.',
 		);
 
 		// The code and the magic link go to the mailbox only. They are never returned to the requester,
@@ -346,17 +343,19 @@ class Xophz_Compass_Phone_Auth_Rest {
 	}
 
 	public function handle_verify_magic_link( WP_REST_Request $request ) {
-		$token = strtoupper( trim( sanitize_text_field( (string) $request->get_param( 'token' ) ) ) );
+		$token = trim( sanitize_text_field( (string) $request->get_param( 'token' ) ) );
 		if ( empty( $token ) ) {
 			return new WP_Error( 'missing_token', 'Verification code or magic link token is required.', array( 'status' => 400 ) );
 		}
 
-		$token_data = get_transient( 'compass_magic_' . $token );
-		if ( ! $token_data || empty( $token_data['email'] ) ) {
-			return new WP_Error( 'invalid_token', 'Magic link is invalid or has expired. Please request a new one.', array( 'status' => 400 ) );
+		// A code is checked against one email (the `email` field or this browser's cookie), with
+		// 5 wrong codes per email and per IP before it stops working (#5982).
+		$verified = Xophz_Compass_Phone_Login_Codes::verify( $token, (string) $request->get_param( 'email' ) );
+		if ( is_wp_error( $verified ) ) {
+			return $verified;
 		}
 
-		$email = $token_data['email'];
+		$email = $verified['email'];
 		$user = get_user_by( 'email', $email );
 
 		if ( ! $user ) {
@@ -386,8 +385,6 @@ class Xophz_Compass_Phone_Auth_Rest {
 		if ( defined( 'TEST_COOKIE' ) ) {
 			$_COOKIE[ TEST_COOKIE ] = 'WP Cookie check';
 		}
-
-		delete_transient( 'compass_magic_' . $token );
 
 		wp_set_current_user( $user->ID );
 		wp_set_auth_cookie( $user->ID, true, is_ssl() );
