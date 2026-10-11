@@ -14,6 +14,7 @@
  *   X-Forwarded-For is not trusted. Behind a reverse proxy every visitor shares the proxy's
  *   address, so this limit then applies to everyone at once.
  * - 5 codes per email per hour, so re-sending cannot reset the per-email limit without end.
+ * - 10 account lookups (POST /check-email) per REMOTE_ADDR per 15 minutes (#5992).
  * Counters are updated under MySQL GET_LOCK, so parallel requests cannot all read the same count.
  *
  * @package Xophz_Compass_Phone
@@ -33,6 +34,9 @@ class Xophz_Compass_Phone_Login_Codes {
 
 	/** Codes that may be sent to one email in an hour. */
 	const MAX_SENDS_PER_HOUR = 5;
+
+	/** Account lookups (POST /check-email) allowed per IP in TTL seconds. */
+	const MAX_LOOKUPS = 10;
 
 	/** HttpOnly cookie naming the email a code was requested for in this browser. */
 	const COOKIE = 'compass_phone_login';
@@ -194,6 +198,33 @@ class Xophz_Compass_Phone_Login_Codes {
 		self::invalidate( $email_key );
 		self::set_cookie( '', time() - HOUR_IN_SECONDS );
 		return array( 'email' => (string) $record['email'] );
+	}
+
+	/**
+	 * Count one account lookup from this REMOTE_ADDR.
+	 *
+	 * @return true|WP_Error 429 `too_many_lookups` after MAX_LOOKUPS lookups in TTL seconds.
+	 */
+	public static function allow_lookup() {
+		$ip_key  = self::client_ip_key();
+		$ip_lock = self::lock( 'l' . $ip_key );
+		if ( is_wp_error( $ip_lock ) ) {
+			return $ip_lock;
+		}
+
+		$name    = self::PREFIX . 'lookup_' . $ip_key;
+		$lookups = (int) get_transient( $name );
+		if ( $lookups >= self::MAX_LOOKUPS ) {
+			self::unlock( $ip_lock );
+			return new WP_Error(
+				'too_many_lookups',
+				'Too many sign-in attempts from this network. Please wait 15 minutes and try again.',
+				array( 'status' => 429 )
+			);
+		}
+		set_transient( $name, $lookups + 1, self::TTL );
+		self::unlock( $ip_lock );
+		return true;
 	}
 
 	/** Delete an email's code, link and cookie binding. */

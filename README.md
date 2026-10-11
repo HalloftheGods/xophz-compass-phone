@@ -50,7 +50,7 @@ All authentication endpoints are registered under the `compass-phone/v1` namespa
 
 | Method | Endpoint | Description | Payload / Query Params |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/wp-json/compass-phone/v1/check-email` | Check if an account exists and retrieve avatar & display name. | `{ "email": "user@example.com" }` |
+| `POST` | `/wp-json/compass-phone/v1/check-email` | Check whether an account exists for an email or username. Returns only `{ "exists": bool }` (no email, username, display name or avatar). 10 lookups per IP (`REMOTE_ADDR`) per 15 minutes (429 `too_many_lookups` after). | `{ "email": "user@example.com" }` |
 | `POST` | `/wp-json/compass-phone/v1/login` | Authenticate using email/username and password. Sets auth cookies and returns fresh REST nonce. | `{ "email": "user@example.com", "password": "..." }` |
 | `POST` | `/wp-json/compass-phone/v1/send-magic-link` | Email a 6-digit code and a magic link (both valid 15 minutes, one live pair per email), and set an HttpOnly `compass_phone_login` cookie that ties the code to this browser. The response is the same whether or not the email has an account. 5 sends per email per hour (429 after). | `{ "email": "user@example.com" }` |
 | `POST` | `/wp-json/compass-phone/v1/verify-magic-link` | Verify a 6-digit code (checked against the `email` field, or the email this browser requested it for via the cookie) or a 64-character magic link token. 5 wrong codes for an email invalidate its code; 5 wrong codes or links from one IP (`REMOTE_ADDR`) block that IP for 15 minutes (429). Auto-creates the account for a new email. | `{ "token": "123456", "email": "user@example.com" }` |

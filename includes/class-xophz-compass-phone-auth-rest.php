@@ -173,6 +173,14 @@ class Xophz_Compass_Phone_Auth_Rest {
 		);
 	}
 
+	/**
+	 * Whether an account exists for an email or username (#5992).
+	 *
+	 * The lock screen needs only this answer, to offer password sign-in or account creation, so the
+	 * response is `{ exists: bool }` with no email, username, display name or avatar. Each
+	 * REMOTE_ADDR gets Xophz_Compass_Phone_Login_Codes::MAX_LOOKUPS lookups per 15 minutes
+	 * (429 `too_many_lookups`).
+	 */
 	public function handle_check_email( WP_REST_Request $request ) {
 		$email_input = trim( (string) $request->get_param( 'email' ) );
 
@@ -180,25 +188,14 @@ class Xophz_Compass_Phone_Auth_Rest {
 			return new WP_Error( 'missing_email', 'Please enter a valid email address.', array( 'status' => 400 ) );
 		}
 
-		$user = get_user_by( 'email', $email_input );
-		if ( ! $user ) {
-			$user = get_user_by( 'login', $email_input );
+		$allowed = Xophz_Compass_Phone_Login_Codes::allow_lookup();
+		if ( is_wp_error( $allowed ) ) {
+			return $allowed;
 		}
 
-		if ( $user ) {
-			return rest_ensure_response( array(
-				'exists'       => true,
-				'email'        => $user->user_email,
-				'username'     => $user->user_login,
-				'display_name' => $user->display_name,
-				'avatar_url'   => get_avatar_url( $user->ID, array( 'size' => 128 ) ),
-			) );
-		}
+		$user = get_user_by( 'email', $email_input ) ?: get_user_by( 'login', $email_input );
 
-		return rest_ensure_response( array(
-			'exists' => false,
-			'email'  => $email_input,
-		) );
+		return rest_ensure_response( array( 'exists' => (bool) $user ) );
 	}
 
 	private function strip_captcha_filters() {
