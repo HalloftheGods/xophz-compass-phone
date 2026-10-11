@@ -340,11 +340,8 @@ class Xophz_Compass_Phone_Auth_Rest {
 			'message'     => 'Verification code & magic link sent! Please check your email inbox.',
 		);
 
-		if ( ( defined( 'WP_ENV' ) && WP_ENV === 'development' ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
-			$response['dev_magic_url'] = $magic_url;
-			$response['dev_token']     = $token;
-		}
-
+		// The code and the magic link go to the mailbox only. They are never returned to the requester,
+		// under any WP_DEBUG or WP_ENV setting: whoever holds them can sign in as that email.
 		return rest_ensure_response( $response );
 	}
 
