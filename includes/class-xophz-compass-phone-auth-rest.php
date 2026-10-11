@@ -556,26 +556,10 @@ class Xophz_Compass_Phone_Auth_Rest {
 			return rest_ensure_response( $res );
 		}
 
-		// Retrieve Stripe Secret Key from WP options, constants, or environment
-		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = get_option( 'xophz_compass_stripe_secret_key' );
-		}
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = get_option( 'stripe_secret_key' );
-		}
-		if ( empty( $stripe_secret_key ) && defined( 'STRIPE_SECRET_KEY' ) ) {
-			$stripe_secret_key = STRIPE_SECRET_KEY;
-		}
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = getenv( 'STRIPE_SECRET_KEY' );
-		}
-		if ( empty( $stripe_secret_key ) && isset( $_ENV['STRIPE_SECRET_KEY'] ) ) {
-			$stripe_secret_key = $_ENV['STRIPE_SECRET_KEY'];
-		}
-		// Fallback to test key if no live key is set
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = get_option( 'compass_stripe_test_secret_key' ) ?: ( defined( 'STRIPE_TEST_SECRET_KEY' ) ? STRIPE_TEST_SECRET_KEY : '' );
+		// Stripe secret key from the WP Connectors API: the live key, else the sandbox key.
+		$stripe_secret_key = Xophz_Compass_Phone_Connectors::get_key( 'stripe_secret_key' );
+		if ( '' === $stripe_secret_key ) {
+			$stripe_secret_key = Xophz_Compass_Phone_Connectors::get_key( 'stripe_test_secret_key' );
 		}
 
 		if ( empty( $stripe_secret_key ) || strpos( $stripe_secret_key, 'sk_test_Mock' ) === 0 ) {
