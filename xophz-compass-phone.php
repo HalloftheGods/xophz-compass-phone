@@ -4,7 +4,8 @@
  * Plugin URI:        https://phone.mycompassconsulting.com
  * Description:       Standalone backend and router for the My Compass Phone web app.
  * Version:           26.10.12
- * Author:            Hall of the Gods, Inc.
+ * Author:            My Compass Consulting
+ * Author URI:        https://mycompassconsulting.com/
  * Category:          Castle Walls
  * Text Domain:       xophz-compass-phone
  */
