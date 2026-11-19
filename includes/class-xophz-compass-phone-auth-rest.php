@@ -662,12 +662,28 @@ class Xophz_Compass_Phone_Auth_Rest {
 		) );
 		$theme = get_option( '_xophz_compass_phone_theme', 'starship' );
 
+		$site_logo = '';
+		$custom_logo_id = function_exists( 'get_theme_mod' ) ? get_theme_mod( 'custom_logo' ) : 0;
+		if ( $custom_logo_id && function_exists( 'wp_get_attachment_image_url' ) ) {
+			$logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
+			if ( $logo_url ) {
+				$site_logo = $logo_url;
+			}
+		}
+		if ( empty( $site_logo ) && function_exists( 'get_site_icon_url' ) ) {
+			$site_icon = get_site_icon_url( 512 );
+			if ( ! empty( $site_icon ) ) {
+				$site_logo = $site_icon;
+			}
+		}
+
 		return rest_ensure_response( array(
 			'success' => true,
 			'data'    => array(
 				'slug'         => $slug,
 				'allowed_apps' => is_array( $allowed ) ? $allowed : array(),
 				'theme'        => $theme,
+				'site_logo'    => $site_logo ?: null,
 			)
 		) );
 	}
