@@ -303,7 +303,7 @@ define(['./workbox-619edae6'], (function (workbox) { 'use strict';
     "revision": null
   }, {
     "url": "manifest.webmanifest",
-    "revision": "484d95ce6819f9de8c9b7cd6c5890d19"
+    "revision": "21f7b7f178811da730d183256b37b549"
   }], {});
   workbox.cleanupOutdatedCaches();
 
