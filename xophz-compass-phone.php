@@ -3,7 +3,7 @@
  * Plugin Name:       My Compass Phone App
  * Plugin URI:        https://phone.mycompassconsulting.com
  * Description:       Standalone backend and router for the My Compass Phone web app.
- * Version:           26.11.22
+ * Version:           26.11.23-334
  * Author:            My Compass Consulting
  * Author URI:        https://mycompassconsulting.com/
  * Category:          Castle Walls
@@ -14,7 +14,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.11.22' );
+define( 'XOPHZ_COMPASS_PHONE_VERSION', '26.11.23-334' );
 define( 'XOPHZ_COMPASS_PHONE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'XOPHZ_COMPASS_PHONE_URL', plugin_dir_url( __FILE__ ) );
 
